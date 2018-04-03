@@ -1,0 +1,57 @@
+<div class="jumbotron">
+        <h1 class="text-center">Alurapic</h1>
+    </div>
+    <div class="container">
+
+        <!-- Se mensagem da classe listagem.component for um valor truth -->
+        <p *ngIf="mensagem.length" class="alert alert-info">{{mensagem}}</p>
+        <div class="row">
+            <div class="col-md-12">
+                <form>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <!-- com routerLink indicamos para ir até a tabela de rotas e acionar a rota
+                                ...em questão, sem recarregar toda página
+                            -->
+                            <a [routerLink]="['/cadastro']" class="btn btn-primary">
+                                Nova foto
+                            </a>
+                        </span>
+                        <!-- Usa o evento keyup para que a cada tecla pressionada force o Angular a rein
+                            derizar a tela e com isso refazer o painel com o filtro do que foi digitado.
+                            Se eu quisesse poderia chamar uma função depois de "=", porém como só quero que
+                            a tela seja reinderizada, já me basta-->
+                        <input #textoProcurado (keyup)="0" class="form-control" placeholder="filtrar pelo título da foto">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+        <!-- 
+            1. *ngFor é um laço for em Angular. No comando abaixo, é iterado o array fotos e a cada foto 
+            processada é criada uma linha da tag painel e foto no HTML
+            2. O pipe é utilizado para realizar filtros na tua expressão. No caso do titulo, está sendo
+            aplicado o uppercase no texto retornado de foto.titulo
+            3. textoProcurado é o nome do input que dei acima, iniciando por "#"
+            4. Define uma variavel para painel com #painel, para uso na função remove
+        <-->
+            <painel #painel *ngFor="let foto of fotos | filtroPorTitulo: textoProcurado.value" 
+                    titulo="{{foto.titulo | uppercase}}" class="col-md-2">
+                <a [routerLink]="['cadastro', foto._id]">
+                    <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+                </a>    
+                <!-- Define um botao da classe BotaoComponent e ao ser clicado, chama executaAcao, que 
+                    por sua vez, dispara o evento "acao", que chamará o modal para exibição da caixa de 
+                    dialogo do jquery -->
+                <botao nome="Remover" 
+                      estilo="btn-danger btn-block"  
+                      (acao)="modal.show()">
+                </botao>
+                <!-- Inclui modal (caixa de dialogo do jquery), que quando acionado e confirmado, removerá
+                    ...a foto -->
+                <modal #modal frase="Tem certeza que deseja remover esta foto?" (confirma)="remove(foto, painel)"></modal>
+                
+            </painel>
+        </div>     
+</div>

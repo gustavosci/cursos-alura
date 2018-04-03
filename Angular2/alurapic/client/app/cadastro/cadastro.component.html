@@ -1,0 +1,69 @@
+<div class="container">
+    <h1 class="text-center">{{foto.titulo}}</h1>
+    <!-- Se mensagem da classe cadastro.component for um valor truth -->
+    <p *ngIf="mensagem.length" class="alert alert-info">{{mensagem}}</p>
+    <form [formGroup]="meuForm" class="row" (submit)="cadastrar($event)">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Título</label>
+                <!-- Importante formsModule no app é possível vincularmos um dado de um objeto a um form usando ngModel-->
+                <input 
+                    formControlName="titulo"
+                    name="titulo" 
+                    [(ngModel)]="foto.titulo" 
+                    class="form-control" 
+                    autocomplete="off">    
+                <div *ngIf="meuForm.controls.titulo.invalid">
+                    <span *ngIf="meuForm.controls.titulo.errors.required" class="form-control alert-danger">
+                        Titulo obrigatório
+                    </span>            
+                    <span *ngIf="meuForm.controls.titulo.errors.minlength" class="form-control alert-danger">
+                        Tamanho minimo 4 caracteres
+                    </span>                                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label>URL</label>
+                <input 
+                    formControlName="url"
+                    name="url" 
+                    [(ngModel)]="foto.url" 
+                    class="form-control"  
+                    autocomplete="off">
+                <div *ngIf="meuForm.controls.url.invalid">
+                    <span *ngIf="meuForm.controls.url.errors.required" class="form-control alert-danger">
+                        URL obrigatória
+                    </span>            
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea 
+                    formControlName="descricao"
+                    name="descricao" 
+                    [(ngModel)]="foto.descricao" 
+                    class="form-control"  
+                    autocomplete="off">
+                </textarea>
+            </div>
+            <!--
+            <button type="submit" class="btn btn-primary" [disabled]="meuForm.invalid">
+                Salvar
+            </button>
+            -->
+            <!-- Defini o atributo desabilitado com [] para base o one way data binding, 
+                 para quando alterar o valor de meuForm.invalid, atualizar desabilitado
+            -->
+            <botao nome="Salvar" 
+                   tipo="Submit"
+                   estilo="btn-primary" 
+                   [desabilitado]="meuForm.invalid">
+            </botao>
+             <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
+            <br>
+        </div>
+        <div class="col-md-6">
+            <foto [url]="foto.url" [titulo]="foto.titulo"></foto>
+        </div>
+    </form>
+</div>
